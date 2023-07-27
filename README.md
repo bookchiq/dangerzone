@@ -69,3 +69,88 @@ To grant this permission:
 5. Enable the toggle beside the directory where your file is present. For example, if the file to be converted is in the Downloads folder, enable the toggle beside Downloads.
 
 (Full Disk Access permission has a similar effect, but it's enough to give Docker access to _only_ the directory containing the intended file(s) to be converted. Full Disk is unnecessary. As of 2023.04.28, granting one of these permissions continues to be required for successful conversion. Apologies for the extra steps. Dangerzone depends on Docker, and the fix for this issue needs to come from upstream. Read more on [#371](https://github.com/freedomofpress/dangerzone/issues/371#issuecomment-1516863056).)
+
+## Using Dangerzone via Command Line Interface (CLI)
+
+For developers and power users, Dangerzone provides a Command Line Interface (CLI) that can be used to interact with the application.
+
+The following instructions outline how to run Dangerzone through CLI on different operating systems. Make sure to install all the prerequisites and dependencies by following the [build instructions](/BUILD.md).
+
+### Debian/Ubuntu and Fedora
+
+Run from the source tree:
+
+```sh
+# start a shell in the virtual environment
+poetry shell
+
+# run the CLI
+./dev_scripts/dangerzone-cli --help
+```
+
+### macOS
+
+After you have set up your development environment as per the macOS instructions:
+
+```sh
+# Start a shell in the virtual environment
+poetry shell
+
+# Run the CLI
+./dev_scripts/dangerzone-cli --help
+```
+
+### Windows
+
+After setting up your development environment:
+
+```sh
+.\dev_scripts\dangerzone-cli.bat --help
+```
+
+## Dangerzone CLI Commands
+
+### `dangerzone-cli`
+
+This is the main command to convert a document(s) into a safe PDF using Dangerzone from the command line.
+
+```sh
+dangerzone-cli [OPTIONS] FILENAMES...
+```
+
+#### Options
+
+- `--output-filename TEXT`: Specify the name of the output file. If multiple input files are specified, you can't use this option. Default is the filename ending with `-safe.pdf`.
+- `--ocr-lang TEXT`: Specify the language for OCR (Optical Character Recognition). By default, no language is set, and OCR is not used.
+- `--archive`: Archive the unsafe version of the document in a subdirectory named 'unsafe'.
+- `--enable-timeouts / --disable-timeouts`: Enable or disable timeouts during document conversion. By default, timeouts are enabled.
+- `--version`: Show the version of Dangerzone you are using.
+- `--help`: Show a message explaining how to use the command and exit.
+
+#### Arguments
+
+- `FILENAMES...`: Specify the input file(s) you want to convert. This is required. If more than one file is specified, the `--output-filename` option can't be used.
+
+#### Examples
+
+Convert a single file and specify the output filename:
+
+```sh
+dangerzone-cli --output-filename safe_document.pdf unsafe_document.docx
+```
+
+Convert multiple files:
+
+```sh
+dangerzone-cli unsafe_document1.docx unsafe_document2.docx
+```
+
+Convert a document and use OCR in English:
+
+```sh
+dangerzone-cli --ocr-lang eng unsafe_document.pdf
+```
+
+#### Output
+
+The CLI will output the status of the conversion process, specifying which documents were successfully converted to safe PDFs and which ones failed.
